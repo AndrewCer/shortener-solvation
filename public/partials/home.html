@@ -30,7 +30,7 @@
             </tr>
             <tr ng-repeat='bookmark in bookmarks'>
               <td>{{bookmark.longUrl}}</td>
-              <td ng-click='redirectUrl(bookmark.shortyUrl)'>{{bookmark.shortyUrl}}</td>
+              <td ><span ng-click='redirectUrl(bookmark.shortyUrl)' class='pointer-fix'>{{bookmark.shortyUrl}}</span></td>
               <td>{{bookmark.clicks}}</td>
             </tr>
           </tbody>

@@ -15,6 +15,11 @@ a {
   display: inline-block;
 }
 
+.pointer-fix:hover {
+  color: blue;
+  cursor: pointer;
+}
+
 .shorten-button {
   margin-left: 10px;
 }
