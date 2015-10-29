@@ -57,4 +57,12 @@ router.post('/redirect', function (req, res) {
   });
 });
 
+router.post('/delete-bookmark', function (req, res) {
+  var bookmark = req.body.bookmark;
+  bookmarks.remove({longUrl: bookmark.longUrl})
+  .then(function () {
+    res.json(true);
+  });
+});
+
 module.exports = router;

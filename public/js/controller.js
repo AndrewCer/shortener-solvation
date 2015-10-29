@@ -1,5 +1,4 @@
 app.controller('MasterController', ['$scope', '$location', function ($scope, $location) {
-  console.log($location.url());
 }]);
 
 app.controller('LoginController', ['$scope', '$location', function ($scope, $location) {
@@ -71,15 +70,27 @@ app.controller('HomeController', ['$scope', '$http', '$window', '$route', functi
     }
   }
 
-  $scope.redirectUrl = function (clickedUrl) {
-    $http.post('api/redirect', {shortyUrl: clickedUrl})
-    .then(function (response) {
-      $scope.urlClicks = response.data.clicks;
-      //if popups allowed
-      $window.open(response.data.longUrl);
-      $route.reload();
-      //if not
-      // $window.location.href = response.data;
-    });
+  $scope.deleteClicked = function (bookmark, delIndex) {
+    $scope.deletionIndex = delIndex;
+    $scope.slottedDeletion = bookmark;
   }
+
+  $scope.deleteBookmark = function () {
+    $http.post('api/delete-bookmark', {bookmark: $scope.slottedDeletion})
+    .then(function (response) {
+      response.data ? $scope.bookmarks.splice($scope.deletionIndex, 1) : console.log('delete broken');
+    })
+  }
+  // NOTE: this was taken out and refactored into a simple anchor tag to prevent popup blocking
+  // $scope.redirectUrl = function (clickedUrl) {
+  //   $http.post('api/redirect', {shortyUrl: clickedUrl})
+  //   .then(function (response) {
+  //     $scope.urlClicks = response.data.clicks;
+  //     //if popups allowed
+  //     $window.open(response.data.longUrl);
+  //     $route.reload();
+  //     //if not
+  //     // $window.location.href = response.data;
+  //   });
+  // }
 }]);
