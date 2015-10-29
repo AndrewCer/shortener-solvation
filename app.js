@@ -5,8 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
+var api = require('./routes/api')
 
 var app = express();
 
@@ -22,14 +21,19 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
-app.use('/users', users);
+app.use('/api', api);
 
-// catch 404 and forward to error handler
+// catch 404 and reload angular page unless not found, then throw 404
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+  console.log(req.url.charAt[0]);
+ if (req.url.charAt[0] != '#') {
+   req.url = '/#' + req.url;
+   res.redirect(req.url);
+ } else {
+ var err = new Error('Not Found');
+ err.status = 404;
+ next(err);
+}
 });
 
 // error handlers

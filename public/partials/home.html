@@ -1,0 +1,31 @@
+<div ng-controller='HomeController'>
+  <h1 class="text-center">Welcome to Shorty</h1>
+  <h4 class="text-center">The URL Shortener</h4>
+  <div class="container col-md-offset-2">
+      <div class="form-group">
+          <p><b>Long URL here:</b></p>
+        <div class="col-md-8 row">
+          <input type="text" class="form-control" ng-model='longUrl'>
+        </div>
+        <button type="button" class="btn btn-primary" ng-click='shortenUrl()'>Shorten</button>
+      </div>
+      <div class="col-md-8">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Long URL</th>
+              <th>Shor.ty URL</th>
+              <th>Clicks</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{postedLongUrl}}</td>
+              <td>{{shortyUrl}}</td>
+              <td>(scope clicks here)10</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  </div>
+</div>
