@@ -14,3 +14,7 @@ a {
 .display-inline {
   display: inline-block;
 }
+
+.shorten-button {
+  margin-left: 10px;
+}

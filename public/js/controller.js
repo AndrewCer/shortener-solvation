@@ -14,6 +14,11 @@ app.controller('HomeController', ['$scope', '$http', '$window', function ($scope
   }
 
   var checkUrl = function (longUrl) {
+    if (longUrl === undefined) {
+      $scope.inputLengthError = true;
+      $scope.badInput = longUrl;
+      return false;
+    }
     if (longUrl === 'http:' || longUrl === 'https:' || longUrl === 'http://' || longUrl === 'https://') {
       $scope.inputError = true;
       $scope.badInput = longUrl;
