@@ -1,14 +1,18 @@
 app.controller('MasterController', ['$scope', function ($scope) {
 }]);
 
-app.controller('HomeController', ['$scope', '$http', '$window', function ($scope, $http, $window) {
+app.controller('HomeController', ['$scope', '$http', '$window', '$route', function ($scope, $http, $window, $route) {
+  $scope.urlClicks = 0;
+
   var getBookmarks = function () {
     $http.get('api/all-bookmarks')
     .then(function (response) {
       $scope.bookmarks = response.data.reverse();
     });
   }
+
   getBookmarks();
+
   var shortyUrl = function () {
     return 'shor.ty/' + (Math.random()*0xFFFFFF<<0);
   }
@@ -45,6 +49,7 @@ app.controller('HomeController', ['$scope', '$http', '$window', function ($scope
           $scope.newPost = true;
           $scope.postedLongUrl = $scope.longUrl;
           $scope.shortyUrl = hexHolder;
+          $scope.longUrl = null;
         }
       });
     }
@@ -52,13 +57,14 @@ app.controller('HomeController', ['$scope', '$http', '$window', function ($scope
       console.log('not passing');
     }
   }
-  $scope.urlClicks = 0;
+
   $scope.redirectUrl = function (clickedUrl) {
     $http.post('api/redirect', {shortyUrl: clickedUrl})
     .then(function (response) {
       $scope.urlClicks = response.data.clicks;
       //if popups allowed
       $window.open(response.data.longUrl);
+      $route.reload();
       //if not
       // $window.location.href = response.data;
     });

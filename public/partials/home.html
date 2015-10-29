@@ -28,7 +28,7 @@
               <td ng-click='redirectUrl(shortyUrl)'>{{shortyUrl}}</td>
               <td>{{urlClicks}}</td>
             </tr>
-            <tr ng-repeat='bookmark in bookmarks'>
+            <tr ng-repeat='bookmark in bookmarks track by $index'>
               <td>{{bookmark.longUrl}}</td>
               <td ><span ng-click='redirectUrl(bookmark.shortyUrl)' class='pointer-fix'>{{bookmark.shortyUrl}}</span></td>
               <td>{{bookmark.clicks}}</td>
