@@ -6,3 +6,11 @@ body {
 a {
   color: #00B7FF;
 }
+
+.color-red {
+  color: red;
+}
+
+.display-inline {
+  display: inline-block;
+}

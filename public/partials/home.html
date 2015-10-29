@@ -5,7 +5,9 @@
       <div class="form-group">
           <p><b>Long URL here:</b></p>
         <div class="col-md-8 row">
-          <input type="text" class="form-control" ng-model='longUrl'>
+          <p class="color-red display-inline" ng-show='inputError'>Invalid URL - Please follow this format: </p>
+          <p class="display-inline" ng-show='inputError'>http://www.google.com</p>
+          <input autofocus type="text" class="form-control" ng-model='longUrl' placeholder="http://www.superlongurl.com/wowevenmore/itkeepsgoing/mabyesomequeryparam/?taco=tuesdays">
         </div>
         <button type="button" class="btn btn-primary" ng-click='shortenUrl()'>Shorten</button>
       </div>
@@ -21,7 +23,7 @@
           <tbody>
             <tr>
               <td>{{postedLongUrl}}</td>
-              <td>{{shortyUrl}}</td>
+              <td ng-click='redirectUrl(shortyUrl)'>{{shortyUrl}}</td>
               <td>(scope clicks here)10</td>
             </tr>
           </tbody>
