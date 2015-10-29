@@ -6,6 +6,16 @@ var bookmarks = db.get('bookmarks');
 var users = db.get('users');
 var bcrypt = require('bcrypt');
 
+router.get('/all-bookmarks', function (req, res) {
+  bookmarks.find({})
+  .then(function (allBookmarks) {
+    allBookmarks.forEach(function (val, i) {
+      delete allBookmarks[i]._id;
+    });
+    res.json(allBookmarks);
+  });
+});
+
 router.post('/shortify', function (req, res) {
   var longUrl = req.body.longUrl;
   var shortyUrl = req.body.shortyUrl
@@ -18,7 +28,7 @@ router.post('/shortify', function (req, res) {
     //     res.json("bookmark exists")
     //   }
     //   else {
-          bookmarks.insert({longUrl: longUrl, shortyUrl: shortyUrl, userName: ""})
+          bookmarks.insert({longUrl: longUrl, shortyUrl: shortyUrl, userName: "", clicks: 0})
           .then(function () {
             res.json(true);
           });
@@ -34,7 +44,15 @@ router.post('/redirect', function (req, res) {
   var shortyUrl = req.body.shortyUrl;
   bookmarks.findOne({shortyUrl: shortyUrl})
   .then(function (bookmark) {
-    res.json(bookmark.longUrl)
+    bookmark.clicks += 1;
+    bookmarks.update({shortyUrl: shortyUrl}, {$set: {clicks: bookmark.clicks}})
+    .then(function () {
+      var bookmarkObj = {
+        longUrl: bookmark.longUrl,
+        clicks: bookmark.clicks
+      };
+      res.json(bookmarkObj);
+    });
   });
 });
 

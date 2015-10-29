@@ -4,9 +4,9 @@
   <div class="container col-md-offset-2">
       <div class="form-group">
           <p><b>Long URL here:</b></p>
+          <p class="color-red display-inline" ng-show='inputError'>{{badInput}} is an invalid URL - Please follow this format: </p>
+          <p class="display-inline" ng-show='inputError'>http://www.google.com OR https://www.google.com</p>
         <div class="col-md-8 row">
-          <p class="color-red display-inline" ng-show='inputError'>Invalid URL - Please follow this format: </p>
-          <p class="display-inline" ng-show='inputError'>http://www.google.com</p>
           <input autofocus type="text" class="form-control" ng-model='longUrl' placeholder="http://www.superlongurl.com/wowevenmore/itkeepsgoing/mabyesomequeryparam/?taco=tuesdays">
         </div>
         <button type="button" class="btn btn-primary" ng-click='shortenUrl()'>Shorten</button>
@@ -21,10 +21,16 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
+            <tr ng-show='newPost'>
               <td>{{postedLongUrl}}</td>
+              <!-- <td>{{bookmark}}</td> -->
               <td ng-click='redirectUrl(shortyUrl)'>{{shortyUrl}}</td>
-              <td>(scope clicks here)10</td>
+              <td>{{urlClicks}}</td>
+            </tr>
+            <tr ng-repeat='bookmark in bookmarks'>
+              <td>{{bookmark.longUrl}}</td>
+              <td ng-click='redirectUrl(bookmark.shortyUrl)'>{{bookmark.shortyUrl}}</td>
+              <td>{{bookmark.clicks}}</td>
             </tr>
           </tbody>
         </table>
