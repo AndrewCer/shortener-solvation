@@ -1,4 +1,11 @@
-app.controller('MasterController', ['$scope', function ($scope) {
+app.controller('MasterController', ['$scope', '$location', function ($scope, $location) {
+  console.log($location.url());
+}]);
+
+app.controller('LoginController', ['$scope', '$location', function ($scope, $location) {
+}]);
+
+app.controller('SignupController', ['$scope', '$location', function ($scope, $location) {
 }]);
 
 app.controller('HomeController', ['$scope', '$http', '$window', '$route', function ($scope, $http, $window, $route) {
