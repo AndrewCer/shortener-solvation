@@ -5,8 +5,7 @@ app.controller('HomeController', ['$scope', '$http', '$window', function ($scope
   var getBookmarks = function () {
     $http.get('api/all-bookmarks')
     .then(function (response) {
-      $scope.bookmarks = response.data;
-      console.log($scope.bookmarks);
+      $scope.bookmarks = response.data.reverse();
     });
   }
   getBookmarks();
