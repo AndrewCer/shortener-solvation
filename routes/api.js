@@ -22,18 +22,19 @@ router.post('/shortify', function (req, res) {
   // TODO: add server side validation
   //if (validation passes) {
     // TODO: check db for existing url
-    // bookmarks.findOne({longUrl: longUrl})
-    // .then(function (bookmark) {
-    //   if (bookmark) {
-    //     res.json("bookmark exists")
-    //   }
-    //   else {
+    bookmarks.findOne({longUrl: longUrl})
+    .then(function (bookmark) {
+      console.log(bookmark);
+      if (bookmark) {
+        res.json(false)
+      }
+      else {
           bookmarks.insert({longUrl: longUrl, shortyUrl: shortyUrl, userName: "", clicks: 0})
           .then(function () {
             res.json(true);
           });
-    //   }
-    // })
+      }
+    })
   //}
   // else {
   //   res.json(false);

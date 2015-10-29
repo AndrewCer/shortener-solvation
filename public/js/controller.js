@@ -53,10 +53,16 @@ app.controller('HomeController', ['$scope', '$http', '$window', '$route', functi
       $http.post('api/shortify', {longUrl: $scope.longUrl, shortyUrl: hexHolder})
       .then(function (response) {
         if (response.data === true) {
+          $scope.inputRedundError = false;
+          $scope.badInput = null;
           $scope.newPost = true;
           $scope.postedLongUrl = $scope.longUrl;
           $scope.shortyUrl = hexHolder;
           $scope.longUrl = null;
+        }
+        else {
+          $scope.inputRedundError = true;
+          $scope.badInput = $scope.longUrl;
         }
       });
     }

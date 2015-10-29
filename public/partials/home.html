@@ -6,6 +6,7 @@
           <p><b>Long URL here:</b></p>
           <p class="color-red display-inline" ng-show='inputError'>{{badInput}} is an invalid URL - Please follow this format: </p>
           <p class="color-red display-inline" ng-show='inputLengthError'>Please Enter a URL</p>
+          <p class="color-red display-inline" ng-show='inputRedundError'>{{badInput}} has already been shortened</p>
           <p class="display-inline" ng-show='inputError'>http://www.google.com OR https://www.google.com</p>
         <div class="col-md-8 row">
           <input autofocus type="text" class="form-control" ng-model='longUrl' placeholder="http://www.superlongurl.com/wowevenmore/itkeepsgoing/mabyesomequeryparam/?taco=tuesdays">
