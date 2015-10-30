@@ -1,4 +1,7 @@
 app.controller('MasterController', ['$scope', '$location', function ($scope, $location) {
+  $scope.backHome = function () {
+    $location.path('/')
+  }
 }]);
 
 app.controller('LoginController', ['$scope', '$location', function ($scope, $location) {
