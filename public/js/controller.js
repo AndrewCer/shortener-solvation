@@ -1,3 +1,7 @@
+var validateSignup = function (userName, pass, passConfirm) {
+  return true;
+}
+
 app.controller('MasterController', ['$scope', '$location', function ($scope, $location) {
   $scope.backHome = function () {
     $location.path('/')
@@ -7,7 +11,28 @@ app.controller('MasterController', ['$scope', '$location', function ($scope, $lo
 app.controller('LoginController', ['$scope', '$location', function ($scope, $location) {
 }]);
 
-app.controller('SignupController', ['$scope', '$location', function ($scope, $location) {
+app.controller('UserController', ['$scope', '$location', function ($scope, $location) {
+  $scope.addBookmark = false;
+  $scope.manageBookmarks = false;
+  $scope.bookMarkChoice = true;
+}]);
+
+app.controller('SignupController', ['$scope', '$location', '$http', function ($scope, $location, $http) {
+  $scope.userSignup = function () {
+    var errorArray = authentication($scope.userName, $scope.password, $scope.passwordConfirm);
+    if (errorArray.length != 0) {
+      $scope.signupErrors = errorArray;
+    }
+    else {
+      $scope.signupErrors = null;
+      $http.post('api/signup', {userName: $scope.userName, password: $scope.password})
+      .then(function (response) {
+        if (response.data) {
+          $location.path('/user-page/' + response.data)
+        }
+      });
+    }
+  }
 }]);
 
 app.controller('HomeController', ['$scope', '$http', '$window', '$route', function ($scope, $http, $window, $route) {

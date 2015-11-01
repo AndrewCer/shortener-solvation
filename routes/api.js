@@ -65,4 +65,20 @@ router.post('/delete-bookmark', function (req, res) {
   });
 });
 
+router.post('/signup', function (req, res) {
+  // TODO: server side validation
+  var userName = req.body.userName;
+  var password = req.body.password;
+  var hash = bcrypt.hashSync(password, 8);
+  users.insert({userName: userName, password: hash, bookmarks: []})
+  .then(function (user) {
+    if (user) {
+      res.json(user._id);
+    }
+    else {
+      res.json(false);
+    }
+  })
+});
+
 module.exports = router;

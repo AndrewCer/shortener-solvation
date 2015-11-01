@@ -1,0 +1,78 @@
+<div ng-controller='UserController'>
+  <h1 class="text-center">Welcome (username){{username}}</h1>
+  <!-- <h4 class="text-center">Manage Your Personal Bookmarks Below</h4> -->
+  <div class="bookmark-choice text-center" ng-show='bookMarkChoice'>
+    <button type="button" class="btn btn-primary" ng-click='showManage()'>Manage Bookmarks</button>
+    <button type="button" class="btn btn-primary" ng-click='show'>Add Bookmarks</button>
+  </div>
+  <div class="container col-md-offset-2" ng-show='manageBookmarks'>
+    <h2>ng-repeate all user bookmarks</h2>
+  </div>
+  <div class="container col-md-offset-2" ng-show='addBookmark'>
+      <div class="form-group">
+          <p><b>Long URL here:</b></p>
+          <p class="color-red display-inline" ng-show='inputError'>{{badInput}} is an invalid URL - Please follow this format: </p>
+          <p class="color-red display-inline" ng-show='inputLengthError'>Please Enter a URL</p>
+          <p class="color-red display-inline" ng-show='inputRedundError'>{{badInput}} has already been shortened</p>
+          <p class="display-inline" ng-show='inputError'>http://www.google.com OR https://www.google.com</p>
+        <div class="col-md-8 row">
+          <input autofocus type="text" class="form-control" ng-model='longUrl' placeholder="http://www.superlongurl.com/wowevenmore/itkeepsgoing/mabyesomequeryparam/?taco=tuesdays">
+        </div>
+        <button type="button" class="btn btn-primary shorten-button" ng-click='shortenUrl()'>Shorten</button>
+      </div>
+      <div class="col-md-8">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Long URL</th>
+              <th>Shor.ty URL</th>
+              <th class="text-center">Clicks</th>
+              <th class="text-center">Remove</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-show='newPost'>
+              <td class="long-url-restraint">{{postedLongUrl}}</td>
+              <!-- <td>{{bookmark}}</td> -->
+              <td><span class='pointer-fix'><a target='_blank' href='{{postedLongUrl}}'>{{shortyUrl}}</a></span></td>
+              <td class="text-center">{{urlClicks}}</td>
+              <!-- TODO: fix this lower td to function just like the ng repeated data -->
+              <td class="text-center"><span ng-click='deleteClicked(bookmark)' class="glyphicon glyphicon-remove hover-red" data-toggle="modal" data-target="#confirmModal"></span></td>
+            </tr>
+            <tr ng-repeat='bookmark in bookmarks track by $index'>
+              <td class="long-url-restraint">{{bookmark.longUrl}}</td>
+              <!-- <td><span ng-click='redirectUrl(bookmark.shortyUrl)' class='pointer-fix'>{{bookmark.shortyUrl}}</span></td> -->
+              <td><span class='pointer-fix'><a target='_blank' href='{{bookmark.longUrl}}'>{{bookmark.shortyUrl}}</a></span></td>
+              <td class="text-center">{{bookmark.clicks}}</td>
+              <td class="text-center"><span ng-click='deleteClicked(bookmark, $index)' class="glyphicon glyphicon-remove hover-red" data-toggle="modal" data-target="#confirmModal"></span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  </div>
+  <!-- Confirmation Modal -->
+  <div class="modal fade" id="confirmModal" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h2 class="modal-title">Warning</h2>
+        </div>
+        <div class="modal-body">
+          <h4>You are about to delete:</h4>
+          <p>Long URL:</p>
+          <p class="color-red modal-long-url">{{slottedDeletion.longUrl}}</p>
+          <p>Short URL:</p>
+          <p class="color-red">{{slottedDeletion.shortyUrl}}</p>
+        </div>
+        <div class="modal-footer">
+          <button ng-click='deleteBookmark()' type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- /Confirmation Modal -->
+</div>
