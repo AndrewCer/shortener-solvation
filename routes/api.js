@@ -118,6 +118,18 @@ router.post('/delete-bookmark', function (req, res) {
   });
 });
 
+router.post('/delete-user-bookmark', function (req, res) {
+  var bookmark = req.body.bookmark;
+  var userId = req.body.userId
+  bookmarks.findOne({longUrl: bookmark.longUrl})
+  .then(function (bookmark) {
+    users.update({_id: userId}, {$pull: {bookmarks: bookmark._id}})
+    .then(function () {
+      res.json(true);
+    })
+  });
+});
+
 router.post('/signup', function (req, res) {
   // TODO: server side validation
   var userName = req.body.userName;

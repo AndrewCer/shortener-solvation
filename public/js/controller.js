@@ -50,7 +50,6 @@ app.controller('UserController', ['$scope', '$location', '$routeParams', '$http'
     if (checkUrl($scope.longUrl)) {
       $http.post('api/user-shortify', {longUrl: $scope.longUrl, shortyUrl: hexHolder, userId: $routeParams.id})
       .then(function (response) {
-        console.log(response);
         if (response.data === true) {
           $scope.addBookmark = false;
           $scope.inputRedundError = false;
@@ -78,6 +77,19 @@ app.controller('UserController', ['$scope', '$location', '$routeParams', '$http'
     .then(function (response) {
       getUserBookmarks();
     });
+  }
+
+  $scope.deleteClicked = function (bookmark, delIndex) {
+    $scope.deletionIndex = delIndex;
+    $scope.slottedDeletion = bookmark;
+  }
+
+  $scope.deleteBookmark = function () {
+    var userId = $routeParams.id;
+    $http.post('api/delete-user-bookmark', {bookmark: $scope.slottedDeletion, userId: userId})
+    .then(function (response) {
+      response.data ? getUserBookmarks() : console.log('delete broken');
+    })
   }
 }]);
 
