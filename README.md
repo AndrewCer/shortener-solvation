@@ -11,4 +11,4 @@ URL shortener...eat it bitly (just kidding I love you guys)
  - npm install
  - touch .env
  - echo "MONGOLAB_URI=localhost/shorty" >> .env
- - nodemon
+ - nodemon (or other equivalent)
