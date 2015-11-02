@@ -24,5 +24,8 @@ var authentication = function (username, password, passwordConfirm) {
   if (password.length >= 31) {
     errorArray.push('Password may not be more than 30 characters');
   }
+  if (password != passwordConfirm) {
+    errorArray.push('Passwords do not match');
+  }
   return errorArray;
 }

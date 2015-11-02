@@ -6,6 +6,52 @@ var bookmarks = db.get('bookmarks');
 var users = db.get('users');
 var bcrypt = require('bcrypt');
 
+var checkUrl = function (longUrl) {
+  if (longUrl === undefined) {
+    return false;
+  }
+  if (longUrl === 'http:' || longUrl === 'https:' || longUrl === 'http://' || longUrl === 'https://') {
+    return false;
+  }
+  var checkArray = longUrl.split('//');
+  if (checkArray[0] === 'http:' || checkArray[0] === 'https:') {
+    return true
+  }
+  else {
+    return false;
+  }
+}
+
+var authentication = function (username, password) {
+  var illegals = /\W/;
+  var errorArray = [];
+  //username
+  if (username.length < 5 && username !=0) {
+    errorArray.push('User Name must be longer than 4 characters')
+  }
+  if (username.length > 15) {
+    errorArray.push('User Name must be less than 15 characters');
+  }
+  if (illegals.test(username)) {
+    errorArray.push('User Name contains illegal characters. Can only use letters, numbers and underscores (no spaces)');
+  }
+  if (username === undefined || !username.replace(/\s/g, '').length) {
+    errorArray.push('User Name can not be blank');
+  }
+  //password
+  if (password === undefined || !password.replace(/\s/g, '').length) {
+    errorArray.push('Password can not be blank');
+  }
+  if (password.length < 6 && password != 0) {
+    errorArray.push('Password must be greater than 5 characters');
+  }
+  if (password.length >= 31) {
+    errorArray.push('Password may not be more than 30 characters');
+  }
+  return errorArray;
+}
+
+
 router.get('/all-bookmarks', function (req, res) {
   bookmarks.find({})
   .then(function (allBookmarks) {
@@ -30,9 +76,7 @@ router.post('/all-user-bookmarks', function (req, res) {
 router.post('/shortify', function (req, res) {
   var longUrl = req.body.longUrl;
   var shortyUrl = req.body.shortyUrl
-  // TODO: add server side validation
-  //if (validation passes) {
-    // TODO: check db for existing url
+  if (checkUrl(longUrl)) {
     bookmarks.findOne({longUrl: longUrl})
     .then(function (bookmark) {
       console.log(bookmark);
@@ -46,10 +90,10 @@ router.post('/shortify', function (req, res) {
           });
       }
     })
-  //}
-  // else {
-  //   res.json(false);
-  // }
+  }
+  else {
+    res.json(false);
+  }
 });
 
 router.post('/user-shortify', function (req, res) {
@@ -131,28 +175,32 @@ router.post('/delete-user-bookmark', function (req, res) {
 });
 
 router.post('/signup', function (req, res) {
-  // TODO: server side validation
   var userName = req.body.userName.toLowerCase();
   var password = req.body.password;
-  var hash = bcrypt.hashSync(password, 8);
-  users.findOne({userName: userName})
-  .then(function (user) {
-    if (user === null) {
-      users.insert({userName: userName, password: hash, bookmarks: []})
-      .then(function (user) {
-        if (user) {
-          res.json(user._id);
-        }
-        else {
-          res.json(false);
-        }
-      })
-    }
-    else {
-      res.json('user exists')
-    }
-  })
-
+  var errorArray = authentication(userName, password);
+  if (errorArray.length != 0) {
+    res.json(false)
+  }
+  else {
+    var hash = bcrypt.hashSync(password, 8);
+    users.findOne({userName: userName})
+    .then(function (user) {
+      if (user === null) {
+        users.insert({userName: userName, password: hash, bookmarks: []})
+        .then(function (user) {
+          if (user) {
+            res.json(user._id);
+          }
+          else {
+            res.json(false);
+          }
+        })
+      }
+      else {
+        res.json('user exists')
+      }
+    })
+  }
 });
 
 router.post('/login', function (req, res) {
