@@ -16,6 +16,17 @@ router.get('/all-bookmarks', function (req, res) {
   });
 });
 
+router.post('/all-user-bookmarks', function (req, res) {
+  var userId = req.body.userId
+  users.findOne({_id: userId})
+  .then(function (user) {
+    bookmarks.find({_id: {$in: user.bookmarks}})
+    .then(function (userBookmarks) {
+      res.json(userBookmarks)
+    })
+  })
+});
+
 router.post('/shortify', function (req, res) {
   var longUrl = req.body.longUrl;
   var shortyUrl = req.body.shortyUrl
@@ -29,7 +40,7 @@ router.post('/shortify', function (req, res) {
         res.json(false)
       }
       else {
-          bookmarks.insert({longUrl: longUrl, shortyUrl: shortyUrl, userName: "", clicks: 0})
+          bookmarks.insert({longUrl: longUrl, shortyUrl: shortyUrl, clicks: 0})
           .then(function () {
             res.json(true);
           });
@@ -39,6 +50,48 @@ router.post('/shortify', function (req, res) {
   // else {
   //   res.json(false);
   // }
+});
+
+router.post('/user-shortify', function (req, res) {
+  var longUrl = req.body.longUrl;
+  var shortyUrl = req.body.shortyUrl;
+  var userId = req.body.userId;
+  users.findOne({ _id: userId})
+  .then(function (user) {
+    if (!user) {
+      console.log('no user found');
+      res.json('no user');
+    }
+    else {
+      bookmarks.findOne({longUrl: longUrl})
+      .then(function (bookmark) {
+        if (bookmark) {
+          for (var i = 0; i < user.bookmarks.length; i++) {
+            console.log(user.bookmarks[i], bookmark._id);
+            if (user.bookmarks[i].toString() == bookmark._id.toString()) {
+              res.json('bookmark exists');
+            }
+          }
+          users.update({_id: userId}, {$push: {bookmarks: bookmark._id}})
+          .then(function () {
+            //success a bookmark was found and added to the users array
+            res.json(true)
+          })
+        }
+        else {
+            bookmarks.insert({longUrl: longUrl, shortyUrl: shortyUrl, clicks: 0})
+            .then(function (bookmark) {
+              users.update({_id: userId}, {$push: {bookmarks: bookmark._id}})
+              .then(function () {
+                //success a bookmark was created and added to the users array
+                res.json(true);
+              })
+            });
+        }
+      })
+
+    }
+  })
 });
 
 router.post('/redirect', function (req, res) {

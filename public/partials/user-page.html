@@ -1,15 +1,11 @@
 <div ng-controller='UserController'>
   <h1 class="text-center">Welcome (username){{username}}</h1>
-  <!-- <h4 class="text-center">Manage Your Personal Bookmarks Below</h4> -->
-  <div class="bookmark-choice text-center" ng-show='bookMarkChoice'>
-    <button type="button" class="btn btn-primary" ng-click='showManage()'>Manage Bookmarks</button>
-    <button type="button" class="btn btn-primary" ng-click='show'>Add Bookmarks</button>
+  <h4 class="text-center">Manage Your Personal Bookmarks Below</h4>
+  <div class="container text-center">
+    <button type="button" class='btn btn-primary' ng-click='addBookmark = !addBookmark' ng-hide='addBookmark'>Add Bookmark</button>
   </div>
-  <div class="container col-md-offset-2" ng-show='manageBookmarks'>
-    <h2>ng-repeate all user bookmarks</h2>
-  </div>
-  <div class="container col-md-offset-2" ng-show='addBookmark'>
-      <div class="form-group">
+  <div class="container col-md-offset-2">
+      <div class="form-group" ng-show='addBookmark'>
           <p><b>Long URL here:</b></p>
           <p class="color-red display-inline" ng-show='inputError'>{{badInput}} is an invalid URL - Please follow this format: </p>
           <p class="color-red display-inline" ng-show='inputLengthError'>Please Enter a URL</p>
@@ -18,7 +14,8 @@
         <div class="col-md-8 row">
           <input autofocus type="text" class="form-control" ng-model='longUrl' placeholder="http://www.superlongurl.com/wowevenmore/itkeepsgoing/mabyesomequeryparam/?taco=tuesdays">
         </div>
-        <button type="button" class="btn btn-primary shorten-button" ng-click='shortenUrl()'>Shorten</button>
+        <button type="button" class="btn btn-primary shorten-button" ng-click='shortenUserUrl()'>Shorten</button>
+        <button type="button" class="btn btn-default" ng-click='addBookmark = !addBookmark'>Cancel</button>
       </div>
       <div class="col-md-8">
         <table class="table table-hover">
@@ -31,14 +28,6 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-show='newPost'>
-              <td class="long-url-restraint">{{postedLongUrl}}</td>
-              <!-- <td>{{bookmark}}</td> -->
-              <td><span class='pointer-fix'><a target='_blank' href='{{postedLongUrl}}'>{{shortyUrl}}</a></span></td>
-              <td class="text-center">{{urlClicks}}</td>
-              <!-- TODO: fix this lower td to function just like the ng repeated data -->
-              <td class="text-center"><span ng-click='deleteClicked(bookmark)' class="glyphicon glyphicon-remove hover-red" data-toggle="modal" data-target="#confirmModal"></span></td>
-            </tr>
             <tr ng-repeat='bookmark in bookmarks track by $index'>
               <td class="long-url-restraint">{{bookmark.longUrl}}</td>
               <!-- <td><span ng-click='redirectUrl(bookmark.shortyUrl)' class='pointer-fix'>{{bookmark.shortyUrl}}</span></td> -->

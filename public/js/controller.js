@@ -1,5 +1,5 @@
-var validateSignup = function (userName, pass, passConfirm) {
-  return true;
+var shortyUrl = function () {
+  return 'shor.ty/' + (Math.random()*0xFFFFFF<<0);
 }
 
 app.controller('MasterController', ['$scope', '$location', function ($scope, $location) {
@@ -11,10 +11,68 @@ app.controller('MasterController', ['$scope', '$location', function ($scope, $lo
 app.controller('LoginController', ['$scope', '$location', function ($scope, $location) {
 }]);
 
-app.controller('UserController', ['$scope', '$location', function ($scope, $location) {
-  $scope.addBookmark = false;
-  $scope.manageBookmarks = false;
-  $scope.bookMarkChoice = true;
+app.controller('UserController', ['$scope', '$location', '$routeParams', '$http', function ($scope, $location, $routeParams, $http) {
+  var getUserBookmarks = function () {
+    //if user id exists in cook do this else remove all cookies and redirect to home page
+    var userId = $routeParams.id;
+    $http.post('api/all-user-bookmarks', {userId: userId})
+    .then(function (response) {
+      $scope.bookmarks = response.data.reverse();
+    })
+  }
+
+  getUserBookmarks();
+
+  var checkUrl = function (longUrl) {
+    if (longUrl === undefined) {
+      $scope.inputLengthError = true;
+      $scope.badInput = longUrl;
+      return false;
+    }
+    if (longUrl === 'http:' || longUrl === 'https:' || longUrl === 'http://' || longUrl === 'https://') {
+      $scope.inputError = true;
+      $scope.badInput = longUrl;
+      return false;
+    }
+    var checkArray = longUrl.split('//');
+    if (checkArray[0] === 'http:' || checkArray[0] === 'https:') {
+      $scope.inputError = false;
+      return true
+    }
+    else {
+      $scope.inputError = true;
+      $scope.badInput = longUrl;
+      return false;
+    }
+  }
+
+  $scope.shortenUserUrl = function () {
+    var hexHolder = shortyUrl();
+    if (checkUrl($scope.longUrl)) {
+      $http.post('api/user-shortify', {longUrl: $scope.longUrl, shortyUrl: hexHolder, userId: $routeParams.id})
+      .then(function (response) {
+        console.log(response);
+        if (response.data === true) {
+          $scope.addBookmark = false;
+          $scope.inputRedundError = false;
+          $scope.badInput = null;
+          $scope.newPost = true;
+          $scope.postedLongUrl = $scope.longUrl;
+          $scope.shortyUrl = hexHolder;
+          $scope.longUrl = null;
+          console.log('about to get bookmarks');
+          getUserBookmarks();
+        }
+        else {
+          $scope.inputRedundError = true;
+          $scope.badInput = $scope.longUrl;
+        }
+      });
+    }
+    else {
+      console.log('not passing');
+    }
+  }
 }]);
 
 app.controller('SignupController', ['$scope', '$location', '$http', function ($scope, $location, $http) {
@@ -46,10 +104,6 @@ app.controller('HomeController', ['$scope', '$http', '$window', '$route', functi
   }
 
   getBookmarks();
-
-  var shortyUrl = function () {
-    return 'shor.ty/' + (Math.random()*0xFFFFFF<<0);
-  }
 
   var checkUrl = function (longUrl) {
     if (longUrl === undefined) {
