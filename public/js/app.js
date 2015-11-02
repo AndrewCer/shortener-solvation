@@ -1,4 +1,4 @@
-var app = angular.module("shortenerSolvation", ['ngRoute']);
+var app = angular.module("shortenerSolvation", ['ngRoute', 'ngCookies']);
 
 
 app.config(function ($routeProvider, $locationProvider) {

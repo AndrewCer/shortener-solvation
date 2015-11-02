@@ -32,9 +32,11 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse pull-right">
           <ul class="nav navbar-nav">
-            <li class="dropwdown active"><a href="/">Home</a></li>
+            <li class="dropwdown"><a href="/">Home</a></li>
+            <li class="dropwdown" ng-show='showUserBar'><a href="#" ng-click='getUserPage()'>Bookmarks</a></li>
+            <li class="dropwdown" ng-show='showUserBar'><a href="#" ng-click='logout()'>Logout</a></li>
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Login/Signup <span class="caret"></span></a>
+              <a href="#" ng-show='showDefaultBar' class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Login/Signup <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="/login">Login</a></li>
                 <li><a href="/signup">Signup</a></li>

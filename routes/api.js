@@ -135,15 +135,56 @@ router.post('/signup', function (req, res) {
   var userName = req.body.userName;
   var password = req.body.password;
   var hash = bcrypt.hashSync(password, 8);
-  users.insert({userName: userName, password: hash, bookmarks: []})
+  users.findOne({userName: userName})
+  .then(function (user) {
+    if (user === null) {
+      users.insert({userName: userName, password: hash, bookmarks: []})
+      .then(function (user) {
+        if (user) {
+          res.json(user._id);
+        }
+        else {
+          res.json(false);
+        }
+      })
+    }
+    else {
+      res.json('user exists')
+    }
+  })
+
+});
+
+router.post('/login', function (req, res) {
+  var userName = req.body.userName;
+  var password = req.body.password;
+  users.findOne({userName: userName})
+  .then(function (user) {
+    if (user === null) {
+      res.json(false)
+    }
+    else {
+      if (bcrypt.compareSync(password, user.password)) {
+        res.json(user._id);
+      }
+      else {
+        res.json(false);
+      }
+    }
+  })
+});
+
+router.post('/check-user', function (req, res) {
+  var userId = req.body.userId;
+  users.findOne({_id: userId})
   .then(function (user) {
     if (user) {
-      res.json(user._id);
+      res.json({userId: user._id, userName: user.userName});
     }
     else {
       res.json(false);
     }
-  })
+  });
 });
 
 module.exports = router;
