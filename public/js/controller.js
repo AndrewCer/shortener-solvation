@@ -208,10 +208,9 @@ app.controller('HomeController', ['$scope', '$http', '$window', '$route', functi
         if (response.data === true) {
           $scope.inputRedundError = false;
           $scope.badInput = null;
-          $scope.newPost = true;
-          $scope.postedLongUrl = $scope.longUrl;
           $scope.shortyUrl = hexHolder;
           $scope.longUrl = null;
+          getBookmarks();
         }
         else {
           $scope.inputRedundError = true;
