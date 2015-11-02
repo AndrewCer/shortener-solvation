@@ -132,7 +132,7 @@ router.post('/delete-user-bookmark', function (req, res) {
 
 router.post('/signup', function (req, res) {
   // TODO: server side validation
-  var userName = req.body.userName;
+  var userName = req.body.userName.toLowerCase();
   var password = req.body.password;
   var hash = bcrypt.hashSync(password, 8);
   users.findOne({userName: userName})
@@ -156,7 +156,7 @@ router.post('/signup', function (req, res) {
 });
 
 router.post('/login', function (req, res) {
-  var userName = req.body.userName;
+  var userName = req.body.userName.toLowerCase();
   var password = req.body.password;
   users.findOne({userName: userName})
   .then(function (user) {
