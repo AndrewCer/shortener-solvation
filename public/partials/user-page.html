@@ -30,8 +30,7 @@
           <tbody>
             <tr ng-repeat='bookmark in bookmarks track by $index'>
               <td class="long-url-restraint">{{bookmark.longUrl}}</td>
-              <!-- <td><span ng-click='redirectUrl(bookmark.shortyUrl)' class='pointer-fix'>{{bookmark.shortyUrl}}</span></td> -->
-              <td><span class='pointer-fix'><a target='_blank' href='{{bookmark.longUrl}}'>{{bookmark.shortyUrl}}</a></span></td>
+              <td><span ng-click='redirectUrl(bookmark.shortyUrl)' class='pointer-fix'><a target='_blank' href='{{bookmark.longUrl}}'>{{bookmark.shortyUrl}}</a></span></td>
               <td class="text-center">{{bookmark.clicks}}</td>
               <td class="text-center"><span ng-click='deleteClicked(bookmark, $index)' class="glyphicon glyphicon-remove hover-red" data-toggle="modal" data-target="#confirmModal"></span></td>
             </tr>

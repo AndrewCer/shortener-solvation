@@ -20,7 +20,6 @@ app.controller('UserController', ['$scope', '$location', '$routeParams', '$http'
       $scope.bookmarks = response.data.reverse();
     })
   }
-
   getUserBookmarks();
 
   var checkUrl = function (longUrl) {
@@ -72,6 +71,13 @@ app.controller('UserController', ['$scope', '$location', '$routeParams', '$http'
     else {
       console.log('not passing');
     }
+  }
+
+  $scope.redirectUrl = function (clickedUrl) {
+    $http.post('api/redirect', {shortyUrl: clickedUrl})
+    .then(function (response) {
+      getUserBookmarks();
+    });
   }
 }]);
 
@@ -163,16 +169,11 @@ app.controller('HomeController', ['$scope', '$http', '$window', '$route', functi
       response.data ? $scope.bookmarks.splice($scope.deletionIndex, 1) : console.log('delete broken');
     })
   }
-  // NOTE: this was taken out and refactored into a simple anchor tag to prevent popup blocking
-  // $scope.redirectUrl = function (clickedUrl) {
-  //   $http.post('api/redirect', {shortyUrl: clickedUrl})
-  //   .then(function (response) {
-  //     $scope.urlClicks = response.data.clicks;
-  //     //if popups allowed
-  //     $window.open(response.data.longUrl);
-  //     $route.reload();
-  //     //if not
-  //     // $window.location.href = response.data;
-  //   });
-  // }
+
+  $scope.redirectUrl = function (clickedUrl) {
+    $http.post('api/redirect', {shortyUrl: clickedUrl})
+    .then(function (response) {
+      getBookmarks();
+    });
+  }
 }]);
